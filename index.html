@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Horoscope</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container d-flex justify-content-center align-items-center flex-column p-4 mt-4 rounded text-center">
+    <h1 class="text-warning">See your Horoscope now</h1>
+    <div class="d-flex justify-content-center align-items-center flex-column"> 
+        <form id="horoscopeForm">
+        <center>
+            <div>
+                <label> Month:  
+                    <select name="month" id="month">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                </label>
+                <label> Day:
+                    <select name="day" id="day"></select>
+                </label>
+                <label> Year:
+                    <select name="year" id="year">
+                        <!-- Years will be populated by JS -->
+                    </select>
+                </label>
+            </div>
+        </center>
+        <br>
+        <div class="d-flex justify-content-center">
+            <button type="submit" name="show_modal">Submit</button>
+        </div>
+        <br>
+        <div>
+            <p><h1 class="text-warning">FAQs</h1></p>
+            <p><h4>What is Horoscope?</h4></p>
+            <p>
+                A horoscope is a diagram of the relative positions of celestial bodies (like planets and stars) at a specific time, often used in astrology to make predictions about a person's personality and future events. It's also the term for the predictions themselves, based on this diagram. 
+            </p>
+            <p><h4>What are Zodiac signs and how are they determined?</h4></p>
+            <p>
+                Zodiac signs, in astrology, are 12 constellations that the sun appears to pass through as the Earth orbits the sun. 
+                Each sign is associated with a specific period of the year and is believed to influence personality traits and characteristics.
+                Your sun sign is determined by the zodiac sign the sun was in at the time of your birth. 
+            </p>
+        </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="zodiacModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 w-100 text-center" id="zodiacModalLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const monthSelect = document.getElementById('month');
+const daySelect = document.getElementById('day');
+const yearSelect = document.getElementById('year');
+const form = document.getElementById('horoscopeForm');
+const modal = new bootstrap.Modal(document.getElementById('zodiacModal'));
+const modalLabel = document.getElementById('zodiacModalLabel');
+const modalBody = document.getElementById('modalBody');
+
+// Populate year dropdown
+for(let y=1961; y<=2025; y++){
+    const option = document.createElement('option');
+    option.value = y;
+    option.textContent = y;
+    yearSelect.appendChild(option);
+}
+
+// Populate day dropdown based on month/year
+function populateDays(){
+    let month = parseInt(monthSelect.value);
+    let year = parseInt(yearSelect.value);
+
+    let days = 31;
+    if([4,6,9,11].includes(month)) days = 30;
+    else if(month===2) days = (year%4===0 && (year%100!==0 || year%400===0)) ? 29 : 28;
+
+    // remember previously selected day
+    let previousDay = parseInt(daySelect.value) || 1;
+
+    daySelect.innerHTML = '';
+    for(let d=1; d<=days; d++){
+        const option = document.createElement('option');
+        option.value = d;
+        option.textContent = d;
+        daySelect.appendChild(option);
+    }
+
+    // restore previous day if possible
+    if(previousDay <= days){
+        daySelect.value = previousDay;
+    } else {
+        daySelect.value = days; // fallback to last valid day
+    }
+}
+
+monthSelect.addEventListener('change', populateDays);
+yearSelect.addEventListener('change', populateDays);
+populateDays();
+
+// Zodiac info
+const zodiacInfo = {
+    Aries: {range:'March 21 - April 19', desc:'Bold and ambitious, Aries dives headfirst into everything.', img:'images/aries.webp'},
+    Taurus: {range:'April 20 - May 20', desc:'Taurus is grounded and known for being reliable.', img:'images/taurus.webp'},
+    Gemini: {range:'May 21 - June 20', desc:'Gemini is curious, adaptable, and thrives on communication and new ideas.', img:'images/gemini.webp'},
+    Cancer: {range:'June 21 - July 22', desc:'Cancer is deeply intuitive, emotional, and protective of loved ones.', img:'images/cancer.webp'},
+    Leo: {range:'July 23 - August 22', desc:'Leo is confident, charismatic, and loves to be in the spotlight.', img:'images/leo.jpg'},
+    Virgo: {range:'August 23 - September 22', desc:'Virgo is analytical, detail-oriented, and values order and cleanliness.', img:'images/virgo.jpg'},
+    Libra: {range:'September 23 - October 22', desc:'Libra is diplomatic, fair-minded, and seeks harmony in all things.', img:'images/libra.webp'},
+    Scorpio: {range:'October 23 - November 21', desc:'Scorpio is passionate, mysterious, and fiercely loyal.', img:'images/scorpio.webp'},
+    Sagittarius: {range:'November 22 - December 21', desc:'Sagittarius is adventurous, optimistic, and driven by a thirst for knowledge.', img:'images/sag.webp'},
+    Capricorn: {range:'December 22 - January 19', desc:'Capricorn is disciplined, responsible, and strives for long-term success.', img:'images/capricorn.webp'},
+    Aquarius: {range:'January 20 - February 18', desc:'Aquarius is innovative, independent, and often ahead of their time.', img:'images/aquarius.webp'},
+    Pisces: {range:'February 19 - March 20', desc:'Pisces is empathetic, artistic, and deeply in tune with emotions.', img:'images/pisces.webp'}
+};
+
+// Calculate zodiac sign
+function getZodiac(month, day){
+    if(month==1) return day<=19?'Capricorn':'Aquarius';
+    if(month==2) return day<=18?'Aquarius':'Pisces';
+    if(month==3) return day<=20?'Pisces':'Aries';
+    if(month==4) return day<=19?'Aries':'Taurus';
+    if(month==5) return day<=20?'Taurus':'Gemini';
+    if(month==6) return day<=20?'Gemini':'Cancer';
+    if(month==7) return day<=22?'Cancer':'Leo';
+    if(month==8) return day<=22?'Leo':'Virgo';
+    if(month==9) return day<=22?'Virgo':'Libra';
+    if(month==10) return day<=22?'Libra':'Scorpio';
+    if(month==11) return day<=21?'Scorpio':'Sagittarius';
+    if(month==12) return day<=22?'Sagittarius':'Capricorn';
+}
+
+// Handle api
+form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const month = parseInt(monthSelect.value);
+    const day = parseInt(daySelect.value);
+    const year = parseInt(yearSelect.value);
+    const zodiac = getZodiac(month, day);
+    
+    modalLabel.textContent = zodiac;
+
+    const info = zodiacInfo[zodiac];
+    let horoscopeText = 'No horoscope available.';
+    try{
+        const apiKey = 'Dk8aFlBNfvCsozJyq97ywA==OytENGf2hdNcM8GD';
+        const res = await fetch(`https://api.api-ninjas.com/v1/horoscope?zodiac=${zodiac}`, {
+            headers:{'X-Api-Key': apiKey}
+        });
+        if(res.ok){
+            const data = await res.json();
+            horoscopeText = data.horoscope || horoscopeText;
+        }
+    }catch(err){ console.log(err); }
+
+    modalBody.innerHTML = `
+        <img src="${info.img}" class="img-fluid mx-auto d-block" style="max-width:400px;">
+        <br>
+        <p class="text-center"><strong>Date Range:</strong><br>${info.range}</p>
+        <p class="text-center"><strong>Description:</strong><br>${info.desc}</p>
+        <hr>
+        <h5 class="text-center">Your Horoscope Today</h5>
+        <p class="text-center">${horoscopeText}</p>
+    `;
+    modal.show();
+});
+</script>
+
+<footer class="text-center text-white py-3">
+    Made by Albert Philip © 2025
+</footer>
+
+</body>
+</html>
