@@ -1,0 +1,84 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom right, #0d1b2a, #1b263b, #415a77, #e0e1dd);
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+
+body {
+    min-height: 70vh;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom right, #0d1b2a, #1b263b, #415a77, #e0e1dd);
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #ccc;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+
+.modal-content {
+    background-color: #1b263b;
+    color: white;
+    border: 2px solid #f0e130;
+}
+
+.modal-header {
+    background-color: #0d1b2a;
+    color: #f0e130;
+}
+
+
+.modal-body img {
+    max-width: 100%;
+    height: auto;
+    max-height: 200px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(240, 225, 48, 0.5);
+}
+
+
+select, button {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    margin: 0 5px;
+}
+
+button[type="submit"] {
+    background-color: #f0e130;
+    color: #0d1b2a;
+    font-weight: bold;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #ffee58;
+}
+
+
+footer {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    font-size: 0.9rem;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: auto;
+}
